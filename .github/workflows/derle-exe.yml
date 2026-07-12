@@ -1,0 +1,21 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+    - name: Restore NuGet Packages
+      run: nuget restore AsarSharp/AsarSharp.csproj
+    - name: Build Solution
+      run: msbuild AsarSharp/AsarSharp.csproj /p:Configuration=Release
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Executable
+        path: AsarSharp/bin/Release/
